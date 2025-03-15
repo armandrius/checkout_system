@@ -10,25 +10,25 @@ FactoryBot.define do
       letters = name.gsub(/[aeiou\s]/i, '').upcase.first(2)
       index += 1 until Thread.current[:unique_code_names].add?(code = letters + index.to_s)
     end
-    price_amount_cents { rand(100..100000) }
+    price { rand(100..100000).pounds }
     price_currency { 'GBP' }
 
-    trait(:gr1) do
+    trait(:green_tea) do
+      name { 'Green Tea' }
       code { 'GR1' }
-      price_amount_cents { 311 }
-      price_currency { 'GBP' }
+      price { 3.11.pounds }
     end
 
-    trait(:sr1) do
+    trait(:strawberry) do
+      name { 'Strawberry' }
       code { 'SR1' }
-      price_amount_cents { 500 }
-      price_currency { 'GBP' }
+      price { 5.00.pounds }
     end
 
-    trait(:cf1) do    
+    trait(:coffee) do
+      name { 'Coffee' }
       code { 'CF1' }
-      price_amount_cents { 1123 }
-      price_currency { 'GBP' }
+      price { 11.23.pounds }
     end
   end
 end

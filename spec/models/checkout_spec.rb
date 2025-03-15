@@ -1,11 +1,14 @@
 RSpec.describe Checkout do
-  let(:green_tea) { FactoryBot.build(:product, :gr1) }
+  let(:green_tea) { FactoryBot.build(:product, :green_tea) }
+  let(:strawberry) { FactoryBot.build(:product, :strawberry) }
+  let(:coffee) { FactoryBot.build(:product, :coffee) }
+
   let(:pricing_rules) { [] }
   let(:checkout) { described_class.new(pricing_rules) }
   subject(:total) { checkout.total }
 
   context 'with buy-one-get-one-free offers' do
-    let(:pricing_rules) { [FactoryBot.build(:offer, :buy_n_get_m, product: green_tea, n: 1, m: 1)] }
+    let(:pricing_rules) { [FactoryBot.build(:buy_n_get_m_offer, product: green_tea, buy: 1, get: 1)] }
 
     context 'when buying 1 unit' do
       before { checkout.scan(green_tea) }
@@ -34,6 +37,37 @@ RSpec.describe Checkout do
       let(:number_of_units) { 5 }
       it 'they cost half the expected price plus one unit price' do
         expect(total).to eq(green_tea.price * (number_of_units / 2 + 1))
+      end
+    end
+  end
+
+  context 'with price discounts for bulk purchases' do
+    let(:min_quantity) { 3 }
+    let(:price) { 4.50.pounds }
+    let(:pricing_rules) do
+      [FactoryBot.build(:bulk_discount_offer, product: strawberry, min_quantity:, price:)]
+    end
+
+    before { quantity.times { checkout.scan(strawberry) } }
+
+    context 'when buying less than the minimum quantity' do
+      let(:quantity) { min_quantity - 1 }
+      it 'costs the normal price' do
+        expect(total).to eq strawberry.price * quantity
+      end
+    end
+
+    context 'when buying the minimum quantity' do
+      let(:quantity) { min_quantity }
+      it 'costs the discounted price' do
+        expect(total).to eq(price * quantity)
+      end
+    end
+
+    context 'when buying more than the minimum quantity' do
+      let(:quantity) { min_quantity + 1 }
+      it 'costs the discounted price for the threshold units plus the normal price for the rest' do
+        expect(total).to eq(price * quantity)
       end
     end
   end
