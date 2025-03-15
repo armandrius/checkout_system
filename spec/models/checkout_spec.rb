@@ -66,7 +66,7 @@ RSpec.describe Checkout do
 
     context 'when buying more than the minimum quantity' do
       let(:quantity) { min_quantity + 1 }
-      it 'costs the discounted price for the threshold units plus the normal price for the rest' do
+      it 'costs the discounted price' do
         expect(total).to eq(price * quantity)
       end
     end
