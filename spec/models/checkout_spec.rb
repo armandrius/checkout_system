@@ -17,7 +17,65 @@ RSpec.describe Checkout do
   let(:checkout) { described_class.new(pricing_rules) }
   subject(:total) { checkout.total }
 
-  describe '#total with only with kinds of offer' do
+  describe '#scan' do
+    context 'when argument is a product' do
+      before { checkout.scan(green_tea) }
+      it 'adds a product to the basket' do
+        expect(checkout.products).to include(green_tea)
+      end
+    end
+
+    context 'when argument is not a product' do
+      it 'raises an ArgumentError' do
+        expect { checkout.scan('not a product') }.to raise_error(ArgumentError)
+      end
+    end
+  end
+  
+  describe '#total' do
+    context 'without any offers' do
+      context 'when the basket is empty' do
+        it 'costs nothing' do
+          expect(total).to eq 0.pounds
+        end
+      end
+
+      context 'when buying one unit' do
+        before { checkout.scan(green_tea) }
+        it 'costs the price of one unit of product' do
+          expect(total).to eq green_tea.price
+        end
+      end
+
+      context 'when buying multiple units' do
+        let(:number_of_units) { 3 }
+        before { number_of_units.times { checkout.scan(green_tea) } }
+        it 'costs the price of the product times the number of units' do
+          expect(total).to eq green_tea.price * number_of_units
+        end
+      end
+
+      context 'when combining multiple products' do
+        let(:green_tea_quantity) { 1 }
+        let(:strawberry_quantity) { 2 }
+        let(:coffeee_quantity) { 3 }
+
+        before do
+          green_tea_quantity.time { checkout.scan(green_tea) }
+          strawberry_quantity.times { checkout.scan(strawberry) }
+          coffeee_quantity.times { checkout.scan(coffee) }
+        end
+
+        it 'calculates the total price correctly' do
+          expect(total).to eq(
+            green_tea.price * green_tea_quantity +
+            strawberry.price * strawberry_quantity +
+            coffee.price * coffeee_quantity
+          )
+        end
+      end
+    end
+
     context 'with buy-one-get-one-free offers' do
       let(:pricing_rules) { [green_tea_offer] }
 
@@ -113,42 +171,42 @@ RSpec.describe Checkout do
         end
       end
     end
-  end
 
-  describe '#total with multiple offers' do
-    let(:pricing_rules) { [green_tea_offer, strawberry_offer, coffee_offer] }
+    context 'with multiple offers' do
+      let(:pricing_rules) { [green_tea_offer, strawberry_offer, coffee_offer] }
 
-    context 'Basket: GR1, SR1, GR1, GR1, CF1' do
-      before do
-        3.times { checkout.scan(green_tea) }
-        1.time { checkout.scan(strawberry) }
-        1.time { checkout.scan(coffee) }
+      context 'Basket: GR1, SR1, GR1, GR1, CF1' do
+        before do
+          3.times { checkout.scan(green_tea) }
+          1.time { checkout.scan(strawberry) }
+          1.time { checkout.scan(coffee) }
+        end
+        expect(total).to eq 22.45.pounds
       end
-      expect(total).to eq 22.45.pounds
-    end
-    
-    context 'Basket: GR1, GR1' do
-      before do
-        2.times { checkout.scan(green_tea) }
+      
+      context 'Basket: GR1, GR1' do
+        before do
+          2.times { checkout.scan(green_tea) }
+        end
+        expect(total).to eq 3.11.pounds
       end
-      expect(total).to eq 3.11.pounds
-    end
-    
-    context 'Basket: SR1, SR1, GR1, SR1' do
-      before do
-        3.times { checkout.scan(strawberry) }
-        1.time { checkout.scan(green_tea) }
+      
+      context 'Basket: SR1, SR1, GR1, SR1' do
+        before do
+          3.times { checkout.scan(strawberry) }
+          1.time { checkout.scan(green_tea) }
+        end
+        expect(total).to eq 16.61.pounds
       end
-      expect(total).to eq 16.61.pounds
-    end
-    
-    context 'Basket: GR1, CF1, SR1, CF1, CF1' do
-      before do
-        1.time { checkout.scan(green_tea) }
-        3.times { checkout.scan(coffee) }
-        1.time { checkout.scan(strawberry) }
+      
+      context 'Basket: GR1, CF1, SR1, CF1, CF1' do
+        before do
+          1.time { checkout.scan(green_tea) }
+          3.times { checkout.scan(coffee) }
+          1.time { checkout.scan(strawberry) }
+        end
+        expect(total).to eq 30.57.pounds
       end
-      expect(total).to eq 30.57.pounds
     end
   end
 end
