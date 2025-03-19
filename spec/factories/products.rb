@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory(:product) do
-    name { Faker::Commerce.unique.product_name }
-    price { rand(100..100000).gbp }
+    sequence(:name) { |n| "Product #{n}" }
+    price { rand(100..100_000).gbp }
 
     trait(:green_tea) do
       name { 'Green Tea' }
