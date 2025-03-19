@@ -3,7 +3,7 @@ module PricingRules
     attr_accessor :product, :buy, :get
 
     def initialize(product: nil, buy: nil, get: nil)
-      # TODO validate inputs, get > buy
+      # TODO: validate inputs, get > buy
       @product = product
       @buy = buy
       @get = get

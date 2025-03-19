@@ -3,7 +3,7 @@ module PricingRules
     attr_accessor :product, :min_quantity, :discount_percentage
 
     def initialize(product: nil, min_quantity: nil, discount_percentage: nil)
-      # TODO validate
+      # TODO: validate
       @product = product
       @min_quantity = min_quantity
       @discount_percentage = discount_percentage

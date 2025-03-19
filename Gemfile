@@ -1,4 +1,4 @@
-source "https://rubygems.org"
+source 'https://rubygems.org'
 
 gem 'debug', '~> 1.10.0'
 gem 'factory_bot', '~> 6.5.1'
