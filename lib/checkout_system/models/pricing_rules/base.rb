@@ -3,6 +3,7 @@
 module PricingRules
   class Base
     include Concerns::Assertable
+    include Concerns::CodeIdentifiable
 
     attr_reader :code, :product
 

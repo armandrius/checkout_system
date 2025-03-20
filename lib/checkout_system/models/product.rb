@@ -2,6 +2,7 @@
 
 class Product
   include Concerns::Assertable
+  include Concerns::CodeIdentifiable
 
   attr_reader :code, :name, :price
 
@@ -13,10 +14,6 @@ class Product
     validate_code!
     validate_name!
     validate_price!
-  end
-
-  def ==(other)
-    other.is_a?(Product) && other.code == code
   end
 
   private

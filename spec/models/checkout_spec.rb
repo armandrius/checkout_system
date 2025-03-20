@@ -90,6 +90,32 @@ RSpec.describe Checkout do
     end
   end
 
+  describe '#add_pricing_rules' do
+    let(:checkout) { described_class.new }
+
+    it 'adds pricing rules to the checkout' do
+      expect { checkout.add_pricing_rules(build(:buy_n_get_m_pricing_rule)) }.to change {
+        checkout.pricing_rules_list.each.count
+      }.by(1)
+    end
+
+    context 'when argument is not a pricing rule' do
+      it 'raises an ArgumentError' do
+        expect { checkout.add_pricing_rules('not a pricing rule') }.to raise_error(ArgumentError)
+      end
+    end
+
+    context 'when adding the same pricing rule twice' do
+      let(:pricing_rule) { build(:buy_n_get_m_pricing_rule) }
+
+      before { 2.times { checkout.add_pricing_rules(pricing_rule) } }
+
+      it 'only adds it once' do
+        expect(checkout.pricing_rules_list.each.count).to eq 1
+      end
+    end
+  end
+
   describe '#total' do
     context 'without any pricing_rules' do
       let(:checkout) { described_class.new }

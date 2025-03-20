@@ -4,16 +4,20 @@ module CheckoutCollections
   class PricingRulesCollection
     include Concerns::Assertable
 
-    def initialize(*pricing_rules)
+    def initialize
       @indexed_pricing_rules = Hash.new { |hash, product_code| hash[product_code] = [] }
-      pricing_rules.each { add(_1) }
     end
 
-    def add(pricing_rule)
-      assert_class!(:pricing_rule, pricing_rule, PricingRules::Base)
+    def add(*pricing_rules)
+      pricing_rules.each do |pricing_rule|
+        assert_class!(:pricing_rule, pricing_rule, PricingRules::Base)
 
-      # TODO: check idempotency
-      @indexed_pricing_rules[pricing_rule.product.code] << pricing_rule
+        rules_for_product = @indexed_pricing_rules[pricing_rule.product.code]
+
+        next if rules_for_product.map(&:code).include?(pricing_rule.code)
+
+        rules_for_product << pricing_rule
+      end
     end
 
     def each(&)
