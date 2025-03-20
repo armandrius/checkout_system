@@ -10,9 +10,9 @@ class Product
     @name = name
     @price = price
 
-    validate_code
-    validate_name
-    validate_price
+    validate_code!
+    validate_name!
+    validate_price!
   end
 
   def ==(other)
@@ -21,19 +21,19 @@ class Product
 
   private
 
-  def validate_code
+  def validate_code!
     assert_class!(:code, code, String)
 
     raise ArgumentError, '"Code" must be a non-empty string' unless code.length.positive?
   end
 
-  def validate_name
+  def validate_name!
     assert_class!(:name, name, String)
 
     raise ArgumentError, '"Name" must be a non-empty string' unless name.length.positive?
   end
 
-  def validate_price
+  def validate_price!
     assert_class!(:price, price, Money)
   end
 end
