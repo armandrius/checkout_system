@@ -82,7 +82,7 @@ RSpec.describe Checkout do
     end
 
     it 'empties the basket' do
-      expect { checkout.empty }.to(change { checkout.line_items_list.total_items }.from(3).to(0))
+      expect { checkout.empty }.to(change { checkout.line_items_list.number_of_items }.from(3).to(0))
     end
 
     it "doesn't clear pricing rules" do

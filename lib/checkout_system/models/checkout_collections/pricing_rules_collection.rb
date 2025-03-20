@@ -2,7 +2,7 @@
 
 module CheckoutCollections
   class PricingRulesCollection
-    include Concerns::Assertable
+    include Concerns::Validatable
 
     def initialize
       @indexed_pricing_rules = Hash.new { |hash, product_code| hash[product_code] = [] }

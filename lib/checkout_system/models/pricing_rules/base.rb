@@ -2,17 +2,18 @@
 
 module PricingRules
   class Base
-    include Concerns::Assertable
+    include Concerns::Validatable
     include Concerns::CodeIdentifiable
 
-    attr_reader :code, :product
+    attr_reader :product
+
+    validates :product, Product
 
     def initialize(code:, product:, **_args)
       @product = product
       @code = code
 
-      validate_code!
-      validate_product!
+      validate!
     end
 
     def final_price(line_item)
@@ -21,18 +22,6 @@ module PricingRules
 
     def product_matches?(line_item)
       line_item.product == product
-    end
-
-    private
-
-    def validate_code!
-      assert_class!(:code, code, String)
-
-      raise(ArgumentError, 'code cannot be empty') unless code.length.positive?
-    end
-
-    def validate_product!
-      assert_class!(:product, product, Product)
     end
   end
 end

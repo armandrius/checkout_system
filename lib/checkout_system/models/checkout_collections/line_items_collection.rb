@@ -2,26 +2,30 @@
 
 module CheckoutCollections
   class LineItemsCollection
-    include Concerns::Assertable
+    include Concerns::Validatable
 
     def initialize
       @indexed_line_items = {}
     end
 
     def products
-      @indexed_line_items.values.map(&:product)
+      line_items.map(&:product)
     end
 
-    def total_items
-      @indexed_line_items.values.sum(&:quantity)
+    def number_of_items
+      line_items.sum(&:quantity)
     end
 
     def original_price
-      @indexed_line_items.values.sum(&:price)
+      line_items.sum(&:price)
     end
 
     def final_price
-      @indexed_line_items.values.sum(&:final_price)
+      line_items.sum(&:final_price)
+    end
+
+    def each(&)
+      line_items.each(&)
     end
 
     def quantity(product)
@@ -41,10 +45,6 @@ module CheckoutCollections
       end
     end
 
-    def each(&)
-      @indexed_line_items.values.each(&)
-    end
-
     def apply_pricing_rules(pricing_rules_list)
       pricing_rules_list.each do |code, pricing_rules|
         next unless (line_item = @indexed_line_items[code])
@@ -56,6 +56,10 @@ module CheckoutCollections
     end
 
     private
+
+    def line_items
+      @indexed_line_items.values
+    end
 
     def assert_same_currency!(product)
       return true if @indexed_line_items.empty?

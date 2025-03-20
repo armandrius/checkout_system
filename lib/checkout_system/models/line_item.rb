@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 class LineItem
+  include Concerns::Validatable
+
   class ImmutableQuantityError < StandardError
     def message = 'Quantity is immutable because a pricing rule was applied'
   end
-
-  include Concerns::Assertable
 
   attr_reader :product, :quantity, :final_price
 
@@ -19,14 +19,14 @@ class LineItem
   def pricing_rules_applied = @pricing_rules_applied.dup
 
   def increment
-    raise ImmutableQuantityError if pricing_rules_applied.any?
+    immutable!
 
     @quantity += 1
     refresh_final_price
   end
 
   def decrement
-    raise ImmutableQuantityError if pricing_rules_applied.any?
+    immutable!
 
     @quantity = [0, @quantity - 1].max
     refresh_final_price
@@ -40,6 +40,10 @@ class LineItem
   end
 
   private
+
+  def immutable!
+    raise ImmutableQuantityError if pricing_rules_applied.any?
+  end
 
   def refresh_final_price
     @final_price = product.price * quantity
