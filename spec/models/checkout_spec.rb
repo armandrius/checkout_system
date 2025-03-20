@@ -62,6 +62,16 @@ RSpec.describe Checkout do
         expect { checkout.scan('not a product') }.to raise_error(ArgumentError)
       end
     end
+
+    context 'when attempting to scan a product with a different currency' do
+      let(:checkout) { described_class.new }
+
+      before { checkout.scan(build(:product, price: 1.eur)) }
+
+      it 'raises an ArgumentError' do
+        expect { checkout.scan(build(:product, price: 1.usd)) }.to raise_error(ArgumentError)
+      end
+    end
   end
 
   describe '#empty' do

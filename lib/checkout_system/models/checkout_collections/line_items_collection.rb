@@ -32,6 +32,7 @@ module CheckoutCollections
 
     def append_product(product)
       assert_class!(:product, product, Product)
+      assert_same_currency!(product)
 
       if @indexed_line_items.key?(product.code)
         @indexed_line_items[product.code].increment
@@ -52,6 +53,17 @@ module CheckoutCollections
           line_item.apply_pricing_rule(pricing_rule)
         end
       end
+    end
+
+    private
+
+    def assert_same_currency!(product)
+      return true if @indexed_line_items.empty?
+
+      first_product = @indexed_line_items.values.first.product
+      return true if first_product.price.currency == product.price.currency
+
+      raise ArgumentError, 'Products must have the same currency'
     end
   end
 end

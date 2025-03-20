@@ -22,7 +22,6 @@ class Checkout
     @line_items_list = CheckoutCollections::LineItemsCollection.new
   end
 
-  # TODO: Multiple currencies mustn't be allowed
   def total
     line_items_list.apply_pricing_rules(pricing_rules_list)
     line_items_list.final_price
