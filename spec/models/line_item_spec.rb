@@ -3,16 +3,13 @@
 require 'spec_helper'
 
 RSpec.describe LineItem do
-  let(:product) { instance_double(Product, price: 100) }
+  let(:product) { build(:product, price: 100.eur) }
   let(:line_item) { described_class.new(product:, quantity: 2) }
   let(:pricing_rule) { PricingRules::Base.new(product:) }
 
   shared_examples 'cannot be modified' do
-    subject(:action) { line_item.increment }
-
     it 'raises an error' do
-      # TODO: Better error class
-      expect { action }.to raise_error("Can't modify quantity because a pricing rule was applied")
+      expect { action }.to raise_error(LineItem::ImmutableQuantityError)
     end
   end
 
@@ -29,7 +26,7 @@ RSpec.describe LineItem do
       end
 
       it 'updates the final price' do
-        expect(line_item.final_price).to eq(300)
+        expect(line_item.final_price).to eq(300.eur)
       end
     end
 
@@ -51,7 +48,7 @@ RSpec.describe LineItem do
       end
 
       it 'updates the final price' do
-        expect(line_item.final_price).to eq(100)
+        expect(line_item.final_price).to eq(100.eur)
       end
 
       it 'does not decrease the quantity below 0' do
@@ -70,7 +67,7 @@ RSpec.describe LineItem do
   end
 
   describe '#apply_pricing_rule' do
-    let(:modified_price) { 150 }
+    let(:modified_price) { 150.eur }
 
     before { allow(pricing_rule).to receive(:final_price).and_return(modified_price) }
 

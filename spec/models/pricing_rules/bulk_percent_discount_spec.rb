@@ -6,9 +6,9 @@ RSpec.describe PricingRules::BulkPercentDiscount do
   let(:line_item) do
     instance_double(
       LineItem,
-      product: build(:product, price: 100),
+      product: build(:product, price: 100.eur),
       quantity:,
-      final_price: 100 * quantity
+      final_price: (100 * quantity).eur
     )
   end
   let(:min_quantity) { 5 }
@@ -43,7 +43,7 @@ RSpec.describe PricingRules::BulkPercentDiscount do
 
     context 'when line item product is different from discount rule product' do
       let(:quantity) { 5 }
-      let(:different_product) { build(:product, price: 200) }
+      let(:different_product) { build(:product, price: 200.eur) }
 
       before do
         allow(pricing_rule).to receive(:product).and_return(build(:product))

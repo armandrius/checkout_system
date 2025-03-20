@@ -30,11 +30,13 @@ module PricingRules
     private
 
     def validate_buy
-      raise ArgumentError, '"Buy" must be a non-negative integer' unless buy.is_a?(Integer) && buy >= 0
+      assert_class!(:buy, buy, Integer)
+      raise ArgumentError, '"Buy" must greater or equal to zero' unless buy >= 0
     end
 
     def validate_get
-      raise ArgumentError, '"Get" must be a non-negative integer' unless get.is_a?(Integer) && get >= 0
+      assert_class!(:get, get, Integer)
+      raise ArgumentError, '"Get" must greater or equal to zero' unless get >= 0
     end
 
     def validate_buy_and_get

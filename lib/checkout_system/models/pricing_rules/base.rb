@@ -2,10 +2,13 @@
 
 module PricingRules
   class Base
+    include Concerns::Assertable
+
     attr_reader :product
 
     def initialize(product:, **_args)
-      # TODO: assert product
+      assert_class!(:product, product, Product)
+
       @product = product
     end
 

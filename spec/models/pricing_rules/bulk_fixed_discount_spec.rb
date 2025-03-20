@@ -4,7 +4,7 @@ require 'spec_helper'
 
 RSpec.describe PricingRules::BulkFixedDiscount do
   let(:product) { build(:product, name: 'Product') }
-  let(:bulk_fixed_discount) { described_class.new(product:, min_quantity: 3, price: 80) }
+  let(:bulk_fixed_discount) { described_class.new(product:, min_quantity: 3, price: 80.gbp) }
   let(:original_total) { quantity * product.price }
   let(:line_item) { instance_double(LineItem, product:, quantity:, final_price: original_total) }
 
