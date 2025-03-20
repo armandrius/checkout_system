@@ -5,7 +5,7 @@ require 'spec_helper'
 RSpec.describe LineItem do
   let(:product) { build(:product, price: 100.eur) }
   let(:line_item) { described_class.new(product:, quantity: 2) }
-  let(:pricing_rule) { PricingRules::Base.new(product:) }
+  let(:pricing_rule) { PricingRules::Base.new(code: 'code', product:) }
 
   shared_examples 'cannot be modified' do
     it 'raises an error' do

@@ -12,7 +12,9 @@ RSpec.describe PricingRules::BulkPercentDiscount do
     )
   end
   let(:min_quantity) { 5 }
-  let(:pricing_rule) { described_class.new(product: line_item.product, min_quantity:, discount_percentage: 10) }
+  let(:pricing_rule) do
+    described_class.new(code: 'code_0', product: line_item.product, min_quantity:, discount_percentage: 10)
+  end
 
   describe '#final_price' do
     shared_examples_for 'applies the discount' do

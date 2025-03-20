@@ -4,27 +4,30 @@ require 'debug'
 require 'spec_helper'
 
 RSpec.describe PricingRules::BuyNGetM do
-  let(:buy_n_get_m) { described_class.new(product: build(:product), buy:, get:) }
+  let(:buy_n_get_m) { described_class.new(code: 'code_0', product: build(:product), buy:, get:) }
 
   describe '#initialize' do
+    let(:product) { build(:product) }
+    let(:code) { 'code_1' }
+
     it 'validates that N must not be negative' do
-      expect { described_class.new(product: build(:product), buy: -1, get: 1) }.to raise_error(ArgumentError)
+      expect { described_class.new(code:, product:, buy: -1, get: 1) }.to raise_error(ArgumentError)
     end
 
     it 'validates that M must not be negative' do
-      expect { described_class.new(product: build(:product), buy: 1, get: -1) }.to raise_error(ArgumentError)
+      expect { described_class.new(code:, product:, buy: 1, get: -1) }.to raise_error(ArgumentError)
     end
 
     it 'validates that N must be an integer' do
-      expect { described_class.new(product: build(:product), buy: 1.1, get: 1) }.to raise_error(ArgumentError)
+      expect { described_class.new(code:, product:, buy: 1.1, get: 1) }.to raise_error(ArgumentError)
     end
 
     it 'validates that M must be an integer' do
-      expect { described_class.new(product: build(:product), buy: 1, get: 1.1) }.to raise_error(ArgumentError)
+      expect { described_class.new(code:, product:, buy: 1, get: 1.1) }.to raise_error(ArgumentError)
     end
 
     it 'validates that N + M are greater than zero' do
-      expect { described_class.new(product: build(:product), buy: 0, get: 0) }.to raise_error(ArgumentError)
+      expect { described_class.new(code:, product:, buy: 0, get: 0) }.to raise_error(ArgumentError)
     end
   end
 
