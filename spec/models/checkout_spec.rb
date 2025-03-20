@@ -64,6 +64,22 @@ RSpec.describe Checkout do
     end
   end
 
+  describe '#empty' do
+    let(:checkout) { described_class.new(build(:buy_n_get_m_pricing_rule)) }
+
+    before do
+      3.times { checkout.scan(build(:product)) }
+    end
+
+    it 'empties the basket' do
+      expect { checkout.empty }.to(change { checkout.line_items_list.total_items }.from(3).to(0))
+    end
+
+    it "doesn't clear pricing rules" do
+      expect { checkout.empty }.not_to(change { checkout.pricing_rules_list.each.count })
+    end
+  end
+
   describe '#total' do
     context 'without any pricing_rules' do
       let(:checkout) { described_class.new }

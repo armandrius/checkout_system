@@ -12,6 +12,10 @@ module CheckoutCollections
       @indexed_line_items.values.map(&:product)
     end
 
+    def total_items
+      @indexed_line_items.values.sum(&:quantity)
+    end
+
     def original_price
       @indexed_line_items.values.sum(&:price)
     end

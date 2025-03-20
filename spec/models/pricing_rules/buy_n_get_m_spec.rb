@@ -134,7 +134,6 @@ RSpec.describe PricingRules::BuyNGetM do
 
   describe '#final_price' do
     context 'when the product does not match' do
-      # TODO: line items factory
       let(:buy) { 1 }
       let(:get) { 1 }
       let(:quantity) { 10 }

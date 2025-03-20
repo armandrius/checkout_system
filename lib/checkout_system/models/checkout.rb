@@ -5,7 +5,7 @@ class Checkout
 
   def initialize(pricing_rules = [])
     @pricing_rules_list = CheckoutCollections::PricingRulesCollection.new(*pricing_rules)
-    @line_items_list = CheckoutCollections::LineItemsCollection.new
+    empty
   end
 
   def scan(*products)
@@ -14,9 +14,12 @@ class Checkout
     end
   end
 
-  # TODO: Empty basket
   def products
     line_items_list.products
+  end
+
+  def empty
+    @line_items_list = CheckoutCollections::LineItemsCollection.new
   end
 
   # TODO: Multiple currencies mustn't be allowed
