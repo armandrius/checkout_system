@@ -1,7 +1,9 @@
-class Product
-  attr_accessor :code, :name, :price
+# frozen_string_literal: true
 
-  def initialize(code: nil, name: nil, price: nil)
+class Product
+  attr_reader :code, :name, :price
+
+  def initialize(code:, name:, price:)
     # TODO: validate inputs
     @code = code
     @name = name

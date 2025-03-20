@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'factory_bot'
 require 'loader'
 
@@ -18,4 +20,6 @@ RSpec.configure do |config|
   end
 
   config.shared_context_metadata_behavior = :apply_to_host_groups
+
+  config.include FactoryBot::Syntax::Methods
 end

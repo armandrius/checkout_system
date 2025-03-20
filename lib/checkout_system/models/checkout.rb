@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 class Checkout
   class PricingRulesList
     def initialize(checkout, *pricing_rules)
-      # TODO do we need the checkout?
+      # TODO: do we need the checkout?
       @checkout = checkout
       @indexed_pricing_rules = Hash.new { |hash, product_code| hash[product_code] = [] }
       pricing_rules.each { add(_1) }
@@ -14,15 +16,15 @@ class Checkout
       @indexed_pricing_rules[pricing_rule.product.code] << pricing_rule
     end
 
-    def each(&block)
-      @indexed_pricing_rules.each(&block)
+    def each(&)
+      @indexed_pricing_rules.each(&)
     end
 
     private
 
     def assert_pricing_rule(rule)
       return if rule.is_a?(PricingRules::Base)
-  
+
       raise ArgumentError, "Expected a pricing rule, got a #{rule.class} instead"
     end
   end
@@ -61,8 +63,8 @@ class Checkout
       end
     end
 
-    def each(&block)
-      @indexed_line_items.values.each(&block)
+    def each(&)
+      @indexed_line_items.values.each(&)
     end
 
     def apply_pricing_rules(pricing_rules_list)
@@ -79,13 +81,14 @@ class Checkout
 
     def assert_product(product)
       return if product.is_a?(Product)
-  
+
       raise ArgumentError, "Expected a product, got a #{product.class} instead"
     end
   end
 
   attr_reader :pricing_rules_list, :line_items_list
-  def initialize(pricing_rules)
+
+  def initialize(pricing_rules = [])
     @pricing_rules_list = PricingRulesList.new(self, *pricing_rules)
     @line_items_list = LineItemsList.new(self)
   end

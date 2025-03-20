@@ -1,6 +1,11 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory(:product) do
+    initialize_with { new(code:, name:, price:) }
+
     sequence(:name) { |n| "Product #{n}" }
+    sequence(:code) { |n| "PR#{n}" }
     price { rand(100..100_000).gbp }
 
     trait(:green_tea) do

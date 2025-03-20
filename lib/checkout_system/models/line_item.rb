@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class LineItem
   # TODO: don't let pricing rules be exposed as an array. Review attribute accessors
   attr_reader :checkout, :product, :quantity, :final_price, :pricing_rules_applied

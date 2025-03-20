@@ -1,0 +1,13 @@
+plugins:
+  - rubocop-rspec
+  - rubocop-performance
+  - rubocop-factory_bot
+
+AllCops:
+  NewCops: enable
+Style/Documentation:
+  Enabled: false
+RSpec/NestedGroups:
+  Max: 4
+RSpec/MessageSpies:
+  EnforcedStyle: receive

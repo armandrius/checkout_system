@@ -1,15 +1,17 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe LineItem do
-  let(:product) { instance_double('Product', price: 100) }
-  let(:line_item) { LineItem.new(product: product, quantity: 2) }
-  let(:pricing_rule) { PricingRules::Base.new }
+  let(:product) { instance_double(Product, price: 100) }
+  let(:line_item) { described_class.new(product:, quantity: 2) }
+  let(:pricing_rule) { PricingRules::Base.new(product:) }
 
   shared_examples 'cannot be modified' do
     subject(:action) { line_item.increment }
 
     it 'raises an error' do
-      # TODO Better error class
+      # TODO: Better error class
       expect { action }.to raise_error("Can't modify quantity because a pricing rule was applied")
     end
   end
@@ -33,7 +35,7 @@ RSpec.describe LineItem do
 
     context 'when a pricing rule is applied' do
       include_context 'with a pricing rule applied'
-      
+
       it_behaves_like 'cannot be modified' do
         subject(:action) { line_item.increment }
       end
@@ -69,6 +71,7 @@ RSpec.describe LineItem do
 
   describe '#apply_pricing_rule' do
     let(:modified_price) { 150 }
+
     before { allow(pricing_rule).to receive(:final_price).and_return(modified_price) }
 
     it 'applies the pricing rule' do
@@ -82,7 +85,7 @@ RSpec.describe LineItem do
     end
 
     it 'raises an error if the argument is not a pricing rule' do
-      expect { line_item.apply_pricing_rule(instance_double('NotAPricingRule')) }.to raise_error(ArgumentError)
+      expect { line_item.apply_pricing_rule('not_a_pricing_rule') }.to raise_error(ArgumentError)
     end
   end
 end
