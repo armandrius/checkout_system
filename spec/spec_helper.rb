@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'factory_bot'
-require 'loader'
+require_relative '../lib/checkout_system/checkout_system'
 
 RSpec.configure do |config|
   config.before(:suite) do

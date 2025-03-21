@@ -10,5 +10,8 @@ ENV APP_HOME=/ruby-app
 RUN mkdir $APP_HOME
 WORKDIR $APP_HOME
 
-ADD Gemfile Gemfile.lock $APP_HOME/
+COPY . $APP_HOME
 RUN bundle install --jobs 20 --retry 5
+
+RUN chmod +x $APP_HOME/bin/checkout_system
+RUN chmod +x $APP_HOME/bin/shop

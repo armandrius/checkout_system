@@ -16,6 +16,10 @@ module PricingRules
       validate!
     end
 
+    def present
+      "#{code}-#{self.class.name} for #{product.code} #{product.name}"
+    end
+
     def final_price(line_item)
       line_item.final_price
     end

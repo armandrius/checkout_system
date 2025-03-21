@@ -16,6 +16,10 @@ module PricingRules
       validates_buy_and_get!
     end
 
+    def present
+      "#{code} Buy #{buy} and get #{get} free discount for #{product.code} #{product.name}"
+    end
+
     def quantity_to_pay(quantity)
       complete_groups, incomplete_group = quantity.divmod(buy + get)
       (complete_groups * buy) + [incomplete_group, buy].min
