@@ -16,7 +16,7 @@ Ensure Docker and Docker Compose are installed:
 Clone the repository and navigate to the project's directory:
 
 ```bash
-git clone <your-repository-url>
+git clone git@github.com:armandrius/checkout_system.git
 cd checkout_system
 ```
 
